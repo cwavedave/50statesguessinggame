@@ -40,20 +40,26 @@ def guess_state():
 guessed_states = []
 
 #TODO Clear marker scoreboard
-while scoreboard.score < 50:
-    user_guess = screen.textinput(title=f"{scoreboard.score}/50", prompt=f"{guess_state()}")
-    if user_guess == "exit":
-        break
-    if user_guess.title() in states and user_guess.title() not in guessed_states:
-        print(user_guess.capitalize())
-        guessed_states.append(user_guess.title())
-        state_check = data[data.state == f"{user_guess.title()}"]
-        set_difference = set(guessed_states) - set(states)
-        list_difference = list(set_difference)
-        print(f"states = {states}")
-        print(f"Guessed States ={guessed_states}")
-        print(f"List differences = {list_difference}")
-        marker.goto(int(state_check.x), int(state_check.y))
-        marker.write(f"{user_guess.title()}", align="center", font=("Courier", 12, "normal"))
-        scoreboard.update_scoreboard()
 
+def game_on():
+    list_difference = states
+
+    while scoreboard.score < 50:
+        user_guess = screen.textinput(title=f"{scoreboard.score}/50", prompt=f"{guess_state()}")
+        if user_guess == "exit":
+            break
+        if user_guess.title() in states and user_guess.title() not in guessed_states:
+            print(user_guess.capitalize())
+            guessed_states.append(user_guess.title())
+            state_check = data[data.state == f"{user_guess.title()}"]
+            set_difference = set(states) - set(guessed_states)
+            list_difference = list(set_difference)
+            pandas.DataFrame(list_difference).to_csv("states_to_guess.csv")
+            print(f"states = {states}")
+            print(f"Guessed States ={guessed_states}")
+            print(f"List differences = {list_difference}")
+            marker.goto(int(state_check.x), int(state_check.y))
+            marker.write(f"{user_guess.title()}", align="center", font=("Courier", 12, "normal"))
+            scoreboard.update_scoreboard()
+
+game_on()
