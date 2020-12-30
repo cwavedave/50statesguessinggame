@@ -1,4 +1,6 @@
 from turtle import Turtle
+import pandas
+
 
 class Scoreboard(Turtle):
     def __init__(self):
@@ -6,7 +8,7 @@ class Scoreboard(Turtle):
         self.color("black")
         self.penup()
         self.hideturtle()
-        self.score = 0
+        self.score = len(pandas.read_csv("guessed_states.csv"))
 
     def update_scoreboard(self):
         self.clear()
